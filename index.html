@@ -15,15 +15,20 @@
         <p class="subtitle">ボードゲーム紹介</p>
       </div>
       <nav class="nav">
-        <a href="index.html" aria-current="page">ゲーム一覧</a>
+        <a href="index.html" aria-current="page">トップ</a>
+        <a href="games.html">ゲーム一覧</a>
         <a href="#about">制作者</a>
       </nav>
     </div>
   </header>
 
   <main class="container">
-    <section aria-label="ゲーム一覧">
-      <div id="gameGrid" class="grid" role="list"></div>
+    <section class="card" aria-label="トップ">
+      <h2>このサイトについて</h2>
+      <p>ボードゲームサークルMottainaGamsのゲーム紹介ページです。</p>
+      <div class="buttons">
+        <a class="btn" href="games.html">ゲーム一覧を見る</a>
+      </div>
     </section>
 
     <section id="about" class="card about" aria-label="制作者">
@@ -37,13 +42,9 @@
   <footer class="container footer">
     <small class="muted">© Mottainai Games</small>
   </footer>
-
-  <script src="assets/js/site.js"></script>
-  <script>
-    window.MG.renderIndex();
-  </script>
 </body>
 </html>
+
 
 
 
