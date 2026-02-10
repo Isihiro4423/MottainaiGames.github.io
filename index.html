@@ -1,0 +1,45 @@
+!doctype html
+html lang=ja
+head
+  meta charset=utf-8 
+  meta name=viewport content=width=device-width, initial-scale=1 
+  titleMottainai Gamestitle
+  meta name=description content=自作ボードゲーム紹介サイト（Mottainai Games） 
+  link rel=stylesheet href=assetscssstyle.css 
+head
+body
+  header class=container
+    div class=header
+      div
+        h1 class=titleMottainai Gamesh1
+        p class=subtitle自作ボードゲーム紹介p
+      div
+      nav class=nav
+        a href=index.html aria-current=pageゲーム一覧a
+        a href=#about制作者a
+      nav
+    div
+  header
+
+  main class=container
+    section aria-label=ゲーム一覧
+      div id=gameGrid class=grid role=listdiv
+    section
+
+    section id=about class=card about aria-label=制作者
+      h2制作者h2
+      pここに自己紹介文（短め）を書きます。p
+      p class=muted連絡先：X  YouTube  メール（任意）p
+    section
+  main
+
+  footer class=container footer
+    small class=muted© Mottainai Gamessmall
+  footer
+
+  script src=assetsjssite.jsscript
+  script
+    window.MG.renderIndex();
+  script
+body
+html
