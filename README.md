@@ -1,0 +1,2 @@
+# MottainaiGames.github.io
+MottainaiGamesのホームページ
