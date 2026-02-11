@@ -41,22 +41,31 @@ window.MG = (() => {
       return;
     }
 
-    for(const g of games){
-      const a = el("a", { href:`game.html?id=${encodeURIComponent(g.id)}`, class:"card gameCard", role:"listitem" }, [
-        el("img", { class:"cover", src:firstImage(g), alt:`${g.title} 画像` }),
-        el("div", {}, [
-          el("h2", {}, [g.title || "Untitled"]),
-          el("p", { class:"muted small" }, [g.catch || ""]),
-          el("div", { class:"badges" }, [
-            el("span", { class:"badge" }, [`人数：${g.players || "-"}`]),
-            el("span", { class:"badge" }, [`時間：${g.time || "-"}`]),
-            el("span", { class:"badge" }, [`年齢：${g.age || "-"}`]),
-          ])
-        ])
-      ]);
-      grid.appendChild(a);
-    }
-  }
+for(const g of games){
+  const firstFeature = (Array.isArray(g.features) && g.features.length) ? g.features[0] : "";
+
+  const card = el("div", { class:"gameCard", role:"listitem" }, [
+    el("img", { class:"cover", src:firstImage(g), alt:`${g.title || "ゲーム"} 画像` }),
+
+    el("div", {}, [
+      el("h2", { class:"gameTitle" }, [g.title || "Untitled"]),
+      el("p", { class:"muted small" }, [g.catch || ""]),
+
+      el("div", { class:"metaRow" }, [
+        el("span", { class:"badge" }, [`人数：${g.players || "-"}`]),
+        el("span", { class:"badge" }, [`時間：${g.time || "-"}`]),
+        el("span", { class:"badge" }, [`年齢：${g.age || "-"}`]),
+      ]),
+
+      firstFeature ? el("p", { class:"featureOne" }, [`特徴：${firstFeature}`]) : el("span", {})
+    ]),
+
+    el("a", { class:"cardBtn", href:`game.html?id=${encodeURIComponent(g.id)}` }, ["詳細を見る"])
+  ]);
+
+  grid.appendChild(card);
+}
+
 
   function setBtn(id, url){
     const btn = document.getElementById(id);
@@ -134,3 +143,4 @@ window.MG = (() => {
 
   return { renderIndex, renderGame };
 })();
+
