@@ -1,10 +1,46 @@
-/* ここだけ差し替え推奨：列数がウィンドウ幅で自動変化 */
+:root{
+  --bg:#0b0c10;
+  --card:#12131a;
+  --text:#f3f4f6;
+  --muted:#aab0c0;
+  --line:#242638;
+  --accent:#7dd3fc;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans JP", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-size: clamp(16px, 1.2vw + 14px, 18px);
+}
+
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+.container{max-width:1040px;margin:0 auto;padding:16px}
+.header{display:flex;gap:12px;align-items:flex-end;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:12px}
+.title{margin:0;font-size:clamp(24px,2vw + 16px,34px)}
+.subtitle{margin:4px 0 0;color:var(--muted)}
+.nav{display:flex;gap:12px;flex-wrap:wrap}
+.nav a{padding:6px 10px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,0.02)}
+
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
   gap:14px;
   margin-top:16px;
 }
+.card{
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+}
+
 
 /* カードの見た目 */
 .gameCard{
@@ -69,3 +105,49 @@
   width:fit-content;
 }
 .cardBtn:hover{ background:rgba(125,211,252,0.08); }
+
+
+.gameCard{display:flex;flex-direction:column;gap:10px}
+.cover{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:12px;border:1px solid var(--line);background:#0f1118}
+.badges{display:flex;gap:8px;flex-wrap:wrap}
+.badge{font-size:0.9em;color:var(--muted);border:1px solid var(--line);padding:3px 8px;border-radius:999px;background:rgba(255,255,255,0.02)}
+
+.card h2{margin:0 0 8px;font-size:1.1em}
+.muted{color:var(--muted)}
+.small{font-size:0.9em}
+
+.footer{border-top:1px solid var(--line);margin-top:16px;padding-top:12px}
+.about{margin-top:16px}
+
+.back{display:inline-block;margin-bottom:8px}
+
+.twoCol{display:grid;grid-template-columns:1fr;gap:12px;margin-top:16px}
+@media(min-width:860px){
+  .twoCol{grid-template-columns: 1.1fr 0.9fr;}
+}
+
+.gallery{display:flex;flex-direction:column;gap:10px}
+.mainImage{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:12px;border:1px solid var(--line);background:#0f1118}
+.thumbs{display:flex;gap:8px;flex-wrap:wrap}
+.thumb{
+  width:72px;height:48px;object-fit:cover;border-radius:10px;
+  border:1px solid var(--line);cursor:pointer;opacity:0.9
+}
+.thumb[aria-current="true"]{outline:2px solid var(--accent);opacity:1}
+
+.meta{display:grid;grid-template-columns:1fr;gap:8px;margin:8px 0 12px}
+.meta > div{display:flex;justify-content:space-between;gap:10px;border:1px solid var(--line);border-radius:12px;padding:10px;background:rgba(255,255,255,0.02)}
+dt{color:var(--muted)}
+dd{margin:0}
+
+.list{margin:0;padding-left:18px}
+.buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.btn{
+  display:inline-block;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,0.03);
+}
+.btn:hover{background:rgba(125,211,252,0.08)}
+
