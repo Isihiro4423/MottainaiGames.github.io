@@ -20,7 +20,7 @@ body{
 a{color:var(--accent);text-decoration:none}
 a:hover{text-decoration:underline}
 
-.container{width:100%;max-width:2600px;margin:0 auto;padding:1px}
+.container{width:100%;max-width:1200px;margin: 0 auto;padding:1px}
 
 .header{
   display:flex;
@@ -102,6 +102,10 @@ a:hover{text-decoration:underline}
   /*border-radius: 16px;*/
   border:1px solid var(--line);
   background:#0f1118;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+
 }
 
 /* buttons */
