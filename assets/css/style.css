@@ -20,7 +20,7 @@ body{
 a{color:var(--accent);text-decoration:none}
 a:hover{text-decoration:underline}
 
-.container{width:100%;max-width:6000px;margin:0 auto;padding:1px}
+.container{width:100%;max-width:2600px;margin:0 auto;padding:1px}
 
 .header{
   display:flex;
