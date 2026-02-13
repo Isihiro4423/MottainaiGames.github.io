@@ -20,7 +20,7 @@ body{
 a{color:var(--accent);text-decoration:none}
 a:hover{text-decoration:underline}
 
-.container{max-width:1040px;margin:0 auto;padding:16px}
+/*.container{max-width:1040px;margin:0 auto;padding:16px}*/
 
 .header{
   display:flex;
@@ -88,9 +88,9 @@ a:hover{text-decoration:underline}
 
 .hero{
   width:100%;
-  aspect-ratio: 21/9;
-  object-fit:cover;
-  border-radius: 16px;
+  aspect-ratio: 28/10;
+  object-fit:fill;
+  /*border-radius: 16px;*/
   border:1px solid var(--line);
   background:#0f1118;
 }
