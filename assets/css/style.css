@@ -96,6 +96,7 @@ a:hover{text-decoration:underline}
 
 .hero{
   width:100%;
+  max-width: 900px; 
   /*aspect-ratio: 28/10;*/
   object-fit:fill;
   /*border-radius: 16px;*/
