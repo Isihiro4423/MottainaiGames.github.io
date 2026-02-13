@@ -21,18 +21,45 @@ a{color:var(--accent);text-decoration:none}
 a:hover{text-decoration:underline}
 
 .container{max-width:1040px;margin:0 auto;padding:16px}
-.header{display:flex;gap:12px;align-items:flex-end;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:12px}
-.title{margin:0;font-size:clamp(24px,2vw + 16px,34px)}
-.subtitle{margin:4px 0 0;color:var(--muted)}
-.nav{display:flex;gap:12px;flex-wrap:wrap}
-.nav a{padding:6px 10px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,0.02)}
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
-  gap:14px;
-  margin-top:16px;
+.header{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--line);
+  padding-bottom:12px;
 }
+
+.brand{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  min-width: 0;
+}
+
+.logo{
+  width:40px;height:40px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:#0f1118;
+  object-fit:cover;
+  flex: 0 0 auto;
+}
+
+.titleWrap{min-width:0}
+.title{margin:0;font-size:clamp(22px,2vw + 14px,34px);line-height:1.15}
+.subtitle{margin:4px 0 0;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.nav{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.nav a{
+  padding:6px 10px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:rgba(255,255,255,0.02);
+}
+.nav a[aria-current="page"]{outline:2px solid rgba(125,211,252,0.35)}
+
 .card{
   background: var(--card);
   border: 1px solid var(--line);
@@ -41,8 +68,53 @@ a:hover{text-decoration:underline}
   box-shadow: 0 6px 24px rgba(0,0,0,0.25);
 }
 
+.muted{color:var(--muted)}
+.small{font-size:0.9em}
 
-/* カードの見た目 */
+.footer{
+  border-top:1px solid var(--line);
+  margin-top:16px;
+  padding-top:12px;
+}
+.footerRow{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.footerRow .brand{gap:8px}
+.footerRow .logo{width:28px;height:28px;border-radius:10px}
+
+.hero{
+  width:100%;
+  aspect-ratio: 21/9;
+  object-fit:cover;
+  border-radius: 16px;
+  border:1px solid var(--line);
+  background:#0f1118;
+}
+
+/* buttons */
+.buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.btn{
+  display:inline-block;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,0.03);
+}
+.btn:hover{background:rgba(125,211,252,0.08)}
+
+/* games list grid: responsive columns */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+  gap:14px;
+  margin-top:16px;
+}
+
+/* game list card */
 .gameCard{
   display:flex;
   flex-direction:column;
@@ -68,17 +140,9 @@ a:hover{text-decoration:underline}
   background:#0f1118;
 }
 
-.gameTitle{
-  margin:2px 0 0;
-  font-size:1.15em;
-}
+.gameTitle{margin:2px 0 0;font-size:1.15em}
 
-.metaRow{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
-
+.metaRow{display:flex;gap:8px;flex-wrap:wrap}
 .badge{
   font-size:0.9em;
   color:var(--muted);
@@ -88,13 +152,8 @@ a:hover{text-decoration:underline}
   background:rgba(255,255,255,0.02);
 }
 
-.featureOne{
-  color:var(--muted);
-  margin:2px 0 0;
-  font-size:0.95em;
-}
+.featureOne{color:var(--muted);margin:2px 0 0;font-size:0.95em}
 
-/* 「詳細を見る」ボタン */
 .cardBtn{
   margin-top:auto;
   display:inline-block;
@@ -104,50 +163,68 @@ a:hover{text-decoration:underline}
   background:rgba(255,255,255,0.03);
   width:fit-content;
 }
-.cardBtn:hover{ background:rgba(125,211,252,0.08); }
+.cardBtn:hover{background:rgba(125,211,252,0.08)}
 
-
-.gameCard{display:flex;flex-direction:column;gap:10px}
-.cover{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:12px;border:1px solid var(--line);background:#0f1118}
-.badges{display:flex;gap:8px;flex-wrap:wrap}
-.badge{font-size:0.9em;color:var(--muted);border:1px solid var(--line);padding:3px 8px;border-radius:999px;background:rgba(255,255,255,0.02)}
-
-.card h2{margin:0 0 8px;font-size:1.1em}
-.muted{color:var(--muted)}
-.small{font-size:0.9em}
-
-.footer{border-top:1px solid var(--line);margin-top:16px;padding-top:12px}
-.about{margin-top:16px}
-
-.back{display:inline-block;margin-bottom:8px}
-
+/* game detail layout */
 .twoCol{display:grid;grid-template-columns:1fr;gap:12px;margin-top:16px}
-@media(min-width:860px){
-  .twoCol{grid-template-columns: 1.1fr 0.9fr;}
-}
+@media(min-width:860px){ .twoCol{grid-template-columns: 1.1fr 0.9fr;} }
 
-.gallery{display:flex;flex-direction:column;gap:10px}
-.mainImage{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:12px;border:1px solid var(--line);background:#0f1118}
-.thumbs{display:flex;gap:8px;flex-wrap:wrap}
-.thumb{
-  width:72px;height:48px;object-fit:cover;border-radius:10px;
-  border:1px solid var(--line);cursor:pointer;opacity:0.9
+.meta{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:8px;
+  margin:8px 0 12px;
 }
-.thumb[aria-current="true"]{outline:2px solid var(--accent);opacity:1}
-
-.meta{display:grid;grid-template-columns:1fr;gap:8px;margin:8px 0 12px}
-.meta > div{display:flex;justify-content:space-between;gap:10px;border:1px solid var(--line);border-radius:12px;padding:10px;background:rgba(255,255,255,0.02)}
+.meta > div{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:10px;
+  background:rgba(255,255,255,0.02)
+}
 dt{color:var(--muted)}
 dd{margin:0}
 
-.list{margin:0;padding-left:18px}
-.buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-.btn{
-  display:inline-block;
-  padding:10px 12px;
+/* carousel with arrow buttons */
+.carousel{position:relative}
+.mainImage{
+  width:100%;
+  aspect-ratio:16/10;
+  object-fit:cover;
   border-radius:12px;
   border:1px solid var(--line);
-  background:rgba(255,255,255,0.03);
+  background:#0f1118
 }
-.btn:hover{background:rgba(125,211,252,0.08)}
+.iconBtn{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:44px;
+  height:44px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:rgba(0,0,0,0.35);
+  color:var(--text);
+  font-size:28px;
+  line-height:0;
+  cursor:pointer;
+}
+#prevBtn{left:10px}
+#nextBtn{right:10px}
+.iconBtn:disabled{opacity:0.35;cursor:default}
 
+/* back (X) */
+.closeBtn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:40px;height:40px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,0.02);
+  font-size:22px;
+  color:var(--text);
+}
+.closeBtn:hover{background:rgba(255,255,255,0.05);text-decoration:none}

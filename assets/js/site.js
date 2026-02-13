@@ -1,12 +1,27 @@
 window.MG = (() => {
-  const DATA_URL = "data/games.json";
+  const GAME_INDEX_URL = "data/games/index.json";
+  const ANNOUNCE_URL = "data/announcements.json";
   const PLACEHOLDER = "assets/images/placeholder.svg";
 
-  async function loadGames(){
-    const res = await fetch(DATA_URL, { cache: "no-store" });
-    if(!res.ok) throw new Error("games.json を読み込めませんでした");
-    const data = await res.json();
-    return Array.isArray(data.games) ? data.games : [];
+  async function loadJSON(url){
+    const res = await fetch(url, { cache: "no-store" });
+    if(!res.ok) throw new Error(`Failed: ${url}`);
+    return await res.json();
+  }
+
+  async function loadGameIds(){
+    const idx = await loadJSON(GAME_INDEX_URL);
+    return Array.isArray(idx.games) ? idx.games : [];
+  }
+
+  async function loadGame(id){
+    return await loadJSON(`data/games/${id}.json`);
+  }
+
+  async function loadAllGames(){
+    const ids = await loadGameIds();
+    const games = await Promise.all(ids.map(loadGame));
+    return games;
   }
 
   function el(tag, attrs = {}, children = []){
@@ -22,57 +37,127 @@ window.MG = (() => {
     return n;
   }
 
-  function safeUrl(u){
-    return (typeof u === "string" && u.trim().length > 0) ? u.trim() : null;
+  function nonEmpty(v){
+    return typeof v === "string" && v.trim().length > 0;
   }
 
   function firstImage(game){
-    return (game.images && game.images.length) ? game.images[0] : PLACEHOLDER;
+    return (Array.isArray(game.images) && game.images.length) ? game.images[0] : PLACEHOLDER;
   }
 
-  async function renderIndex(){
+  function badgeIf(label, value){
+    if(!nonEmpty(value)) return null;
+    return el("span", { class:"badge" }, [`${label}：${value}`]);
+  }
+
+  // games.html：一覧
+  async function renderGamesList(){
     const grid = document.getElementById("gameGrid");
     grid.innerHTML = "";
 
     let games = [];
-    try { games = await loadGames(); }
+    try { games = await loadAllGames(); }
     catch(e){
-      grid.appendChild(el("div", { class:"card" }, ["読み込みエラー：games.json を確認してください。"]));
+      grid.appendChild(el("div", { class:"card" }, ["読み込みエラー：data/games/ を確認してください。"]));
       return;
     }
 
-for(const g of games){
-  const firstFeature = (Array.isArray(g.features) && g.features.length) ? g.features[0] : "";
+    for(const g of games){
+      const card = el("div", { class:"gameCard", role:"listitem" }, [
+        el("img", { class:"cover", src:firstImage(g), alt:`${g.title || "ゲーム"} 画像` }),
 
-  const card = el("div", { class:"gameCard", role:"listitem" }, [
-    el("img", { class:"cover", src:firstImage(g), alt:`${g.title || "ゲーム"} 画像` }),
+        el("div", {}, [
+          el("h2", { class:"gameTitle" }, [g.title || "Untitled"]),
+          nonEmpty(g.catch) ? el("p", { class:"muted small" }, [g.catch]) : el("span", {}),
 
-    el("div", {}, [
-      el("h2", { class:"gameTitle" }, [g.title || "Untitled"]),
-      el("p", { class:"muted small" }, [g.catch || ""]),
+          el("div", { class:"metaRow" }, [
+            badgeIf("人数", g.players),
+            badgeIf("時間", g.time),
+          ].filter(Boolean)),
 
-      el("div", { class:"metaRow" }, [
-        el("span", { class:"badge" }, [`人数：${g.players || "-"}`]),
-        el("span", { class:"badge" }, [`時間：${g.time || "-"}`]),
-        el("span", { class:"badge" }, [`年齢：${g.age || "-"}`]),
-      ]),
+          nonEmpty(g.feature1) ? el("p", { class:"featureOne" }, [`特徴：${g.feature1}`]) : el("span", {})
+        ]),
 
-      firstFeature ? el("p", { class:"featureOne" }, [`特徴：${firstFeature}`]) : el("span", {})
-    ]),
+        el("a", { class:"cardBtn", href:`game.html?id=${encodeURIComponent(g.id)}` }, ["詳細を見る"])
+      ]);
 
-    el("a", { class:"cardBtn", href:`game.html?id=${encodeURIComponent(g.id)}` }, ["詳細を見る"])
-  ]);
+      grid.appendChild(card);
+    }
+  }
 
-  grid.appendChild(card);
-}
+  // index.html：トップ
+  async function renderHome(){
+    // お知らせ：空なら非表示
+    const newsSection = document.getElementById("newsSection");
+    const newsList = document.getElementById("newsList");
+    if(newsSection && newsList){
+      try{
+        const a = await loadJSON(ANNOUNCE_URL);
+        const items = Array.isArray(a.items) ? a.items : [];
+        if(items.length === 0){
+          newsSection.style.display = "none";
+        }else{
+          newsSection.style.display = "";
+          newsList.innerHTML = "";
+          items.forEach(it => {
+            const line = `${it.date ? it.date + "： " : ""}${it.text || ""}`;
+            if(line.trim()) newsList.appendChild(el("li", {}, [line]));
+          });
+        }
+      }catch(_){
+        newsSection.style.display = "none";
+      }
+    }
 
+    // 最新ゲーム
+    const latestBox = document.getElementById("latestGame");
+    if(latestBox){
+      try{
+        let games = await loadAllGames();
+        games = games.filter(g => g && g.id);
 
-  function setBtn(id, url){
+        games.sort((a,b) => {
+          const da = nonEmpty(a.publishedAt) ? Date.parse(a.publishedAt) : 0;
+          const db = nonEmpty(b.publishedAt) ? Date.parse(b.publishedAt) : 0;
+          return db - da;
+        });
+
+        const g = games[0];
+        if(!g){
+          latestBox.style.display = "none";
+          return;
+        }
+
+        latestBox.innerHTML = "";
+        latestBox.appendChild(
+          el("div", { class:"gameCard" }, [
+            el("img", { class:"cover", src:firstImage(g), alt:`${g.title || "最新ゲーム"} 画像` }),
+            el("div", {}, [
+              el("h2", { class:"gameTitle" }, [g.title || "Untitled"]),
+              nonEmpty(g.catch) ? el("p", { class:"muted small" }, [g.catch]) : el("span", {}),
+              el("div", { class:"metaRow" }, [
+                badgeIf("人数", g.players),
+                badgeIf("時間", g.time),
+                badgeIf("年齢", g.age),
+              ].filter(Boolean)),
+              nonEmpty(g.feature1) ? el("p", { class:"featureOne" }, [`特徴：${g.feature1}`]) : el("span", {})
+            ]),
+            el("a", { class:"cardBtn", href:`game.html?id=${encodeURIComponent(g.id)}` }, ["詳細を見る"])
+          ])
+        );
+      }catch(_){
+        latestBox.style.display = "none";
+      }
+    }
+  }
+
+  // game.html：詳細
+  function setLinkBtn(id, url){
     const btn = document.getElementById(id);
-    const u = safeUrl(url);
-    if(!u){ btn.style.display = "none"; return; }
+    if(!btn) return;
+    if(!nonEmpty(url)){ btn.style.display = "none"; return; }
     btn.style.display = "inline-block";
-    btn.href = u;
+    btn.href = url.trim();
   }
 
   async function renderGame(){
@@ -83,16 +168,10 @@ for(const g of games){
       return;
     }
 
-    let games = [];
-    try { games = await loadGames(); }
-    catch(e){
+    let g;
+    try { g = await loadGame(id); }
+    catch(_){
       document.getElementById("gameTitle").textContent = "読み込みエラー";
-      return;
-    }
-
-    const g = games.find(x => String(x.id) === String(id));
-    if(!g){
-      document.getElementById("gameTitle").textContent = "Game not found";
       return;
     }
 
@@ -100,47 +179,47 @@ for(const g of games){
     document.getElementById("gameTitle").textContent = g.title || "";
     document.getElementById("gameCatch").textContent = g.catch || "";
 
-    document.getElementById("players").textContent = g.players || "-";
-    document.getElementById("time").textContent = g.time || "-";
-    document.getElementById("age").textContent = g.age || "-";
-
-    // features
-    const ul = document.getElementById("features");
-    ul.innerHTML = "";
-    (g.features || []).forEach(t => ul.appendChild(el("li", {}, [t])));
-
-    // buttons
-    setBtn("rulesBtn", g.rulesPdf);
-    setBtn("shopBtn", g.shopUrl);
-    setBtn("videoBtn", g.videoUrl);
-
-    // gallery
-    const imgs = (g.images && g.images.length) ? g.images : [PLACEHOLDER];
-    const main = document.getElementById("mainImage");
-    const thumbs = document.getElementById("thumbs");
-    thumbs.innerHTML = "";
-
-    function setMain(src){
-      main.src = src;
-      for(const im of thumbs.querySelectorAll("img")){
-        im.setAttribute("aria-current", (im.src === new URL(src, location.href).href) ? "true" : "false");
-      }
-    }
-
-    imgs.forEach((src, i) => {
-      const t = el("img", {
-        class:"thumb",
-        src,
-        alt:`サムネイル ${i+1}`,
-        "aria-current": i===0 ? "true" : "false",
-        onclick: () => setMain(src)
-      });
-      thumbs.appendChild(t);
+    // 基本情報：無い項目は非表示
+    const rows = [
+      ["playersRow", g.players],
+      ["timeRow", g.time],
+      ["ageRow", g.age],
+    ];
+    rows.forEach(([rowId, value]) => {
+      const row = document.getElementById(rowId);
+      if(!row) return;
+      if(nonEmpty(value)) row.querySelector("dd").textContent = value;
+      else row.style.display = "none";
     });
 
-    setMain(imgs[0]);
+    const desc = document.getElementById("description");
+    if(desc){
+      if(nonEmpty(g.description)) desc.textContent = g.description;
+      else desc.style.display = "none";
+    }
+
+    // リンク（無いものは非表示）
+    setLinkBtn("rulesBtn", g.links?.rulesPdf);
+    setLinkBtn("shopBtn", g.links?.shopUrl);
+    setLinkBtn("videoBtn", g.links?.videoUrl);
+
+    // 画像切替（左右ボタン）
+    const images = (Array.isArray(g.images) && g.images.length) ? g.images : [PLACEHOLDER];
+    const main = document.getElementById("mainImage");
+    const prev = document.getElementById("prevBtn");
+    const next = document.getElementById("nextBtn");
+
+    let i = 0;
+    function show(){
+      main.src = images[i];
+      if(prev) prev.disabled = images.length <= 1;
+      if(next) next.disabled = images.length <= 1;
+    }
+    if(prev) prev.addEventListener("click", () => { i = (i - 1 + images.length) % images.length; show(); });
+    if(next) next.addEventListener("click", () => { i = (i + 1) % images.length; show(); });
+
+    show();
   }
 
-  return { renderIndex, renderGame };
+  return { renderGamesList, renderHome, renderGame };
 })();
-

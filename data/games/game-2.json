@@ -1,0 +1,19 @@
+{
+  "id": "game-2",
+  "title": "ゲーム名2",
+  "catch": "一言コメント（一覧に出す）",
+  "players": "1-4人",
+  "time": "30分",
+  "age": "12歳+",
+  "feature1": "特徴1（一覧に出す）",
+  "description": "ここにゲーム詳細説明を書きます（詳細ページ）。",
+  "images": [
+    "assets/images/placeholder.svg"
+  ],
+  "links": {
+    "rulesPdf": "",
+    "shopUrl": "",
+    "videoUrl": ""
+  },
+  "publishedAt": "2026-02-02"
+}

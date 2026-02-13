@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1680" height="720" viewBox="0 0 1680 720">
+  <rect width="1680" height="720" fill="#0f1118"/>
+  <rect x="48" y="48" width="1584" height="624" rx="36" fill="#12131a" stroke="#242638" stroke-width="8"/>
+  <text x="840" y="350" fill="#aab0c0" font-size="54" font-family="system-ui, -apple-system, Segoe UI, sans-serif" text-anchor="middle">
+    Hero Image Placeholder
+  </text>
+  <text x="840" y="420" fill="#aab0c0" font-size="30" font-family="system-ui, -apple-system, Segoe UI, sans-serif" text-anchor="middle">
+    assets/images/hero.jpg に差し替え
+  </text>
+</svg>

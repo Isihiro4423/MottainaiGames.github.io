@@ -3,20 +3,24 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mottainai Games - Game</title>
-  <meta name="robots" content="noindex" />
   <link rel="stylesheet" href="assets/css/style.css" />
+
+  <title>Mottainai Games - ゲーム詳細</title>
+  <meta name="description" content="自作ボードゲーム詳細（Mottainai Games）" />
 </head>
 <body>
   <header class="container">
     <div class="header">
-      <div>
-        <a class="back" href="games.html">← 一覧へ戻る</a>
-        <h1 id="gameTitle" class="title">Game</h1>
-        <p id="gameCatch" class="subtitle"></p>
+      <div class="brand">
+        <a class="closeBtn" href="games.html" aria-label="閉じる">✕</a>
+        <div class="titleWrap">
+          <h1 id="gameTitle" class="title">Game</h1>
+          <p id="gameCatch" class="subtitle"></p>
+        </div>
       </div>
-      <nav class="nav">
-        <a href="index.html">ゲーム一覧</a>
+      <nav class="nav" aria-label="ページ">
+        <a href="index.html">トップ</a>
+        <a href="games.html">ゲーム一覧</a>
       </nav>
     </div>
   </header>
@@ -24,42 +28,49 @@
   <main class="container">
     <section class="twoCol">
       <div class="card">
-        <div class="gallery">
+        <div class="carousel">
+          <button id="prevBtn" class="iconBtn" aria-label="前の画像">‹</button>
           <img id="mainImage" class="mainImage" alt="ゲーム画像" />
-          <div id="thumbs" class="thumbs" aria-label="画像一覧"></div>
+          <button id="nextBtn" class="iconBtn" aria-label="次の画像">›</button>
         </div>
       </div>
 
       <div class="card">
         <h2>基本情報</h2>
         <dl class="meta">
-          <div><dt>人数</dt><dd id="players"></dd></div>
-          <div><dt>時間</dt><dd id="time"></dd></div>
-          <div><dt>年齢</dt><dd id="age"></dd></div>
+          <div id="playersRow"><dt>人数</dt><dd></dd></div>
+          <div id="timeRow"><dt>時間</dt><dd></dd></div>
+          <div id="ageRow"><dt>年齢</dt><dd></dd></div>
         </dl>
 
-        <h2>特徴</h2>
-        <ul id="features" class="list"></ul>
+        <h2>ゲーム詳細</h2>
+        <p id="description" class="muted"></p>
 
+        <h2>リンク</h2>
         <div class="buttons" aria-label="リンク">
-          <a id="rulesBtn" class="btn" target="_blank" rel="noopener">ルールPDF</a>
-          <a id="shopBtn" class="btn" target="_blank" rel="noopener">通販</a>
+          <a id="rulesBtn" class="btn" target="_blank" rel="noopener">説明書（PDF）</a>
           <a id="videoBtn" class="btn" target="_blank" rel="noopener">動画</a>
+          <a id="shopBtn" class="btn" target="_blank" rel="noopener">ストア</a>
         </div>
-
-        <p class="muted small">※リンクが未設定の場合はボタンが消えます。</p>
+        <p class="muted small">※登録のないリンクは自動で非表示になります。</p>
       </div>
     </section>
   </main>
 
   <footer class="container footer">
-    <small class="muted">© Mottainai Games</small>
+    <div class="footerRow">
+      <div class="brand">
+        <img class="logo" src="assets/images/logo-placeholder.svg" alt="サークルロゴ" />
+        <small class="muted">© Mottainai Games</small>
+      </div>
+      <nav class="nav" aria-label="ページ">
+        <a href="index.html">トップ</a>
+        <a href="games.html">ゲーム一覧</a>
+      </nav>
+    </div>
   </footer>
 
   <script src="assets/js/site.js"></script>
-  <script>
-    window.MG.renderGame();
-  </script>
+  <script>window.MG.renderGame();</script>
 </body>
 </html>
-
