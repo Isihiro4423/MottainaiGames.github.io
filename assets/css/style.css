@@ -240,3 +240,11 @@ dd{margin:0}
   color:var(--text);
 }
 .closeBtn:hover{background:rgba(255,255,255,0.05);text-decoration:none}
+
+/*絞り込み*/
+.filterBar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:16px}
+.filterBar input{flex:1 1 260px;min-width:220px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,0.02);color:var(--text)}
+.tagWrap{display:flex;flex-wrap:wrap;gap:8px}
+.btn{cursor:pointer}
+.tagBtn[aria-pressed="true"]{outline:2px solid rgba(125,211,252,0.35);background:rgba(125,211,252,0.08)}
+
