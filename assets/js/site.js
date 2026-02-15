@@ -50,40 +50,147 @@ window.MG = (() => {
     return el("span", { class:"badge" }, [`${label}：${value}`]);
   }
 
-  // games.html：一覧
-  async function renderGamesList(){
-    const grid = document.getElementById("gameGrid");
-    grid.innerHTML = "";
 
-    let games = [];
-    try { games = await loadAllGames(); }
-    catch(e){
-      grid.appendChild(el("div", { class:"card" }, ["読み込みエラー：data/games/ を確認してください。"]));
+ // games.html：一覧（検索＆タグ絞り込み対応）
+async function renderGamesList(){
+  const grid = document.getElementById("gameGrid");
+  grid.innerHTML = "";
+
+  let games = [];
+  try {
+    games = await loadAllGames();
+  } catch(e){
+    grid.appendChild(el("div", { class:"card" }, ["読み込みエラー：data/games/ を確認してください。"]));
+    return;
+  }
+
+  // ---- フィルタUIを挿入----
+  const parent = grid.parentElement || grid;
+  let bar = document.getElementById("filterBar");
+  if(!bar){
+    bar = el("div", { id:"filterBar", class:"card filterBar", role:"region", "aria-label":"検索と絞り込み" }, []);
+    parent.insertBefore(bar, grid);
+  }
+  bar.innerHTML = "";
+
+  const selected = new Set();
+
+  const input = el("input", {
+    id:"searchInput",
+    type:"search",
+    placeholder:"検索（タイトル・キャッチ・説明）"
+  });
+
+  const clearBtn = el("button", {
+    type:"button",
+    class:"btn",
+    onclick: () => { input.value = ""; selected.clear(); update(); }
+  }, ["クリア"]);
+
+  const tagWrap = el("div", { class:"tagWrap" }, []);
+  const allTags = [...new Set(
+    games.flatMap(g => Array.isArray(g.tags) ? g.tags : [])
+  )].filter(t => typeof t === "string" && t.trim().length > 0);
+
+  const allBtn = el("button", {
+    type:"button",
+    class:"btn tagBtn",
+    "aria-pressed":"true",
+    onclick: () => { selected.clear(); update(); }
+  }, ["すべて"]);
+  allBtn.dataset.tag = "__all__";
+  tagWrap.appendChild(allBtn);
+
+  for(const t of allTags){
+    const btn = el("button", {
+      type:"button",
+      class:"btn tagBtn",
+      "aria-pressed":"false",
+      onclick: () => {
+        if(selected.has(t)) selected.delete(t);
+        else selected.add(t);
+        update();
+      }
+    }, [t]);
+    btn.dataset.tag = t;
+    tagWrap.appendChild(btn);
+  }
+
+  const count = el("span", { class:"muted small", id:"resultCount" }, [""]);
+
+  bar.appendChild(input);
+  bar.appendChild(clearBtn);
+  bar.appendChild(tagWrap);
+  bar.appendChild(count);
+
+  input.addEventListener("input", () => update());
+
+  // ---- 絞り込みロジック ----
+  function matchQuery(g, q){
+    if(!q) return true;
+    const s = (v)=> (typeof v === "string" ? v : "");
+    const hay = (s(g.title) + " " + s(g.catch) + " " + s(g.feature1) + " " + s(g.description)).toLowerCase();
+    return hay.includes(q);
+  }
+
+  function matchTags(g){
+    if(selected.size === 0) return true; // 何も選ばれてない＝全部表示
+    const tags = Array.isArray(g.tags) ? g.tags : [];
+    return tags.some(t => selected.has(t)); // OR条件（どれか一致）
+  }
+
+  function updateTagButtons(){
+    allBtn.setAttribute("aria-pressed", selected.size === 0 ? "true" : "false");
+    tagWrap.querySelectorAll("button[data-tag]").forEach(btn => {
+      const t = btn.dataset.tag;
+      if(t === "__all__") return;
+      btn.setAttribute("aria-pressed", selected.has(t) ? "true" : "false");
+    });
+  }
+
+  function renderCards(list){
+    grid.innerHTML = "";
+    if(list.length === 0){
+      grid.appendChild(el("div", { class:"card" }, ["該当する作品がありません。"]));
       return;
     }
 
-    for(const g of games){
+    for(const g of list){
+      const tagBadges = (Array.isArray(g.tags) ? g.tags : []).slice(0, 3)
+        .map(t => el("span", { class:"badge" }, [t]));
+
       const card = el("div", { class:"gameCard", role:"listitem" }, [
         el("img", { class:"cover", src:firstImage(g), alt:`${g.title || "ゲーム"} 画像` }),
-
         el("div", {}, [
           el("h2", { class:"gameTitle" }, [g.title || "Untitled"]),
           nonEmpty(g.catch) ? el("p", { class:"muted small" }, [g.catch]) : el("span", {}),
-
           el("div", { class:"metaRow" }, [
             badgeIf("人数", g.players),
             badgeIf("時間", g.time),
+            ...tagBadges
           ].filter(Boolean)),
-
           nonEmpty(g.feature1) ? el("p", { class:"featureOne" }, [`特徴：${g.feature1}`]) : el("span", {})
         ]),
-
         el("a", { class:"cardBtn", href:`game.html?id=${encodeURIComponent(g.id)}` }, ["詳細を見る"])
       ]);
 
       grid.appendChild(card);
     }
   }
+
+  function update(){
+    const q = input.value.trim().toLowerCase();
+    const filtered = games
+      .filter(g => g && g.id)
+      .filter(g => matchQuery(g, q) && matchTags(g));
+
+    updateTagButtons();
+    count.textContent = `表示：${filtered.length} / ${games.length}`;
+    renderCards(filtered);
+  }
+
+  update();
+}
 
   // index.html：トップ
   async function renderHome(){
