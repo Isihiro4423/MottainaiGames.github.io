@@ -18,11 +18,13 @@ window.MG = (() => {
     return await loadJSON(`data/games/${id}.json`);
   }
 
-  async function loadAllGames(){
-    const ids = await loadGameIds();
-    const games = await Promise.all(ids.map(loadGame));
-    return games;
-  }
+async function loadAllGames(){
+  const ids = await loadGameIds();
+  const results = await Promise.allSettled(ids.map(loadGame));
+  return results
+    .filter(r => r.status === "fulfilled")
+    .map(r => r.value);
+}
 
   function el(tag, attrs = {}, children = []){
     const n = document.createElement(tag);
