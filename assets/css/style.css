@@ -262,4 +262,10 @@ dd{margin:0}
   line-height:1.15;
 }
 
+/* 絞り込みのボタン文字を白に固定 */
+.filterBar button,
+.btn,
+.tagBtn{
+  color: var(--text);
+}
 
