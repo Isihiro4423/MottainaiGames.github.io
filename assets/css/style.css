@@ -71,6 +71,7 @@ a:hover{text-decoration:underline}
 .cardtop{
   display:flex;
   align-items:center;
+  justify-content:flex-start;
   justify-content:center;
   background: #fff;
   border: 1px solid var(--line);
@@ -99,6 +100,8 @@ a:hover{text-decoration:underline}
 .footerRow .logo{width:28px;height:28px;border-radius:10px}
 
 .hero{
+  width:100%;
+  max-width:600px;
   width:50%;
   /*max-width: 900px;*/ 
   /*aspect-ratio: 28/10;*/
@@ -270,4 +273,3 @@ dd{margin:0}
 .filterBar button{
   color: var(--text) !important;
 }
-
