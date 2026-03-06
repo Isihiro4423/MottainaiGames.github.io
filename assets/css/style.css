@@ -22,6 +22,14 @@ a:hover{text-decoration:underline}
 
 .container{width:100%;max-width:1200px;margin: 0 auto;padding:1px}
 
+
+header.container{
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg);
+}
+
 .header{
   display:flex;
   gap:12px;
@@ -63,16 +71,32 @@ a:hover{text-decoration:underline}
 .card{
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: 0;
   padding: 14px;
   box-shadow: 0 6px 24px rgba(0,0,0,0.25);
 }
 
 .cardtop{
-  background: transparent;
-  border: none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 0;
   box-shadow: none;
   padding: 0;
+  overflow:hidden;
+}
+
+
+
+.lineOnlySection{
+  background: transparent;
+  border: none;
+  border-top: 1px solid var(--line);
+  box-shadow: none;
+  border-radius: 0;
+  padding: 14px 0;
 }
 
 .muted{color:var(--muted)}
@@ -94,16 +118,15 @@ a:hover{text-decoration:underline}
 .footerRow .logo{width:28px;height:28px;border-radius:10px}
 
 .hero{
-  width:100%;
-  /*max-width: 900px;*/ 
+  width:50%;
   /*aspect-ratio: 28/10;*/
   object-fit:fill;
-  /*border-radius: 16px;*/
-  border:1px solid var(--line);
+  border-radius: 0;
+  border:none;
   background:#0f1118;
   height: auto;
   display: block;
-  margin: 0 auto;
+  margin: 0;
 
 }
 
@@ -265,5 +288,3 @@ dd{margin:0}
 .filterBar button{
   color: var(--text) !important;
 }
-
-
