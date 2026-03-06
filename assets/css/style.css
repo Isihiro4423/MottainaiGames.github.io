@@ -22,6 +22,14 @@ a:hover{text-decoration:underline}
 
 .container{width:100%;max-width:1200px;margin: 0 auto;padding:1px}
 
+
+.siteHeader{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  background:var(--bg);
+}
+
 .header{
   display:flex;
   gap:12px;
