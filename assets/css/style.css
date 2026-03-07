@@ -20,7 +20,7 @@ body{
 a{color:var(--accent);text-decoration:none}
 a:hover{text-decoration:underline}
 
-.container{width:100%;max-width:1200px;margin: 0 auto;padding:1px}
+.container{width:100%;max-width:1200px;margin: 0 auto;padding:1px 16px 1px 26px}
 
 
 .siteHeader{
@@ -92,7 +92,7 @@ a:hover{text-decoration:underline}
 
 .homeMain > section{
   border-top:1px solid var(--line);
-  padding:18px 0;
+  padding:18px 8px 18px 14px;
 }
 
 .homeMain .card{
