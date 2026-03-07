@@ -218,46 +218,6 @@ async function renderGamesList(){
       }
     }
 
-    // 最新ゲーム
-    const latestBox = document.getElementById("latestGame");
-    if(latestBox){
-      try{
-        let games = await loadAllGames();
-        games = games.filter(g => g && g.id);
-
-        games.sort((a,b) => {
-          const da = nonEmpty(a.publishedAt) ? Date.parse(a.publishedAt) : 0;
-          const db = nonEmpty(b.publishedAt) ? Date.parse(b.publishedAt) : 0;
-          return db - da;
-        });
-
-        const g = games[0];
-        if(!g){
-          latestBox.style.display = "none";
-          return;
-        }
-
-        latestBox.innerHTML = "";
-        latestBox.appendChild(
-          el("div", { class:"gameCard" }, [
-            el("img", { class:"cover", src:firstImage(g), alt:`${g.title || "最新ゲーム"} 画像` }),
-            el("div", {}, [
-              el("h2", { class:"gameTitle" }, [g.title || "Untitled"]),
-              nonEmpty(g.catch) ? el("p", { class:"muted small" }, [g.catch]) : el("span", {}),
-              el("div", { class:"metaRow" }, [
-                badgeIf("人数", g.players),
-                badgeIf("時間", g.time),
-                badgeIf("年齢", g.age),
-              ].filter(Boolean)),
-              nonEmpty(g.feature1) ? el("p", { class:"featureOne" }, [`特徴：${g.feature1}`]) : el("span", {})
-            ]),
-            el("a", { class:"cardBtn", href:`game.html?id=${encodeURIComponent(g.id)}` }, ["詳細を見る"])
-          ])
-        );
-      }catch(_){
-        latestBox.style.display = "none";
-      }
-    }
   }
 
   // game.html：詳細
